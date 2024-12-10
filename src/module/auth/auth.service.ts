@@ -23,7 +23,7 @@ export class AuthService {
     const userDto = new AuthDto(auth);
     const data = await this.userService.findGetByAuth(userDto.email);
 
-    if (this.bcrypt.compareHash(userDto.password, data.password)) {
+    if (await this.bcrypt.compareHash(userDto.password, data.password)) {
       const payload = {
         sub: data.id,
         email: data.email,

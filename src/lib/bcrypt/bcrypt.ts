@@ -9,7 +9,7 @@ export class Bcrypt {
   }
 
   async compareHash(password: string, passwordDb: string): Promise<boolean> {
-    const status = bcrypt.compare(password, passwordDb);
+    const status = await bcrypt.compare(password, passwordDb);
     if (status) {
       return true;
     }

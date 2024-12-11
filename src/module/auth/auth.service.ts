@@ -23,13 +23,19 @@ export class AuthService {
     const userDto = new AuthDto(auth);
     const data = await this.userService.findGetByAuth(userDto.email);
 
-    if (this.bcrypt.compareHash(userDto.password, data.password)) {
+    if (await this.bcrypt.compareHash(userDto.password, data.password)) {
       const payload = {
         sub: data.id,
         email: data.email,
       };
-      const token = this.jwtService.sign(payload);
-      return { token, expireIn: this.expirationJwtTime };
+      const token = await this.jwtService.sign(payload);
+      return {
+        id: data.id,
+        name: data.name,
+        email: data.email,
+        token,
+        expireIn: this.expirationJwtTime,
+      };
     }
     throw new UnauthorizedException('Usuário ou senha incorreto');
   }

@@ -1,3 +1,4 @@
+import { UnauthorizedException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 
 export class Bcrypt {
@@ -9,10 +10,10 @@ export class Bcrypt {
   }
 
   async compareHash(password: string, passwordDb: string): Promise<boolean> {
-    const status = bcrypt.compare(password, passwordDb);
-    if (status) {
+    const status = await bcrypt.compare(password, passwordDb);
+    if (status === true) {
       return true;
     }
-    return false;
+    throw new UnauthorizedException('Usuário ou senha incorreto');
   }
 }
